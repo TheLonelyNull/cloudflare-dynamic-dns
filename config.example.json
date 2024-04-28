@@ -1,0 +1,9 @@
+{
+  "bearer_token": "<Your bearer token here>",
+  "zone_id": "<Your zone id here>",
+  "domain_configs": [
+    {
+      "domain_name": "example.mydomain.com"
+    }
+  ]
+}

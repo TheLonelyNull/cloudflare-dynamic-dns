@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "cloudflare-dynamic-dns"
+packages = [{include = "cloudflare_dynamic_dns"}]
+version = "0.1.0"
+description = ""
+authors = ["Christoff Rossouw <chris.rossouw5@gmail.com>"]
+license = "GPL-3.0"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+httpx = "^0.27.0"
+
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.3.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
