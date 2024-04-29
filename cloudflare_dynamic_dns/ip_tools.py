@@ -14,13 +14,13 @@ TIMEOUT = 10
 
 async def get_public_ipv4_address(ip_provider_urls: list[str] | None = None) -> str:
     ip_provider_urls = ip_provider_urls or IPV4_PROVIDER_URLS  # TODO probably move this
-    tasks = [request_ipv4_address(url) for url in ip_provider_urls]
+    tasks = [_request_ipv4_address(url) for url in ip_provider_urls]
     results = [result for result in await asyncio.gather(*tasks) if result]
     frequency_count = Counter(results)
     return max(frequency_count.items())[0]  # TODO raise if none found
 
 
-async def request_ipv4_address(url: str):  # TODO allow passing in headers, params etc
+async def _request_ipv4_address(url: str):  # TODO allow passing in headers, params etc
     try:
         async with httpx.AsyncClient() as client:
             response = await client.get(url, timeout=TIMEOUT)
