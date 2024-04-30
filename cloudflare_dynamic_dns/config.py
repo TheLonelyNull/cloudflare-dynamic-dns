@@ -21,17 +21,19 @@ class Config(BaseModel):
     log_level: str = Field("INFO", alias="LOG_LEVEL")
     looping: bool = Field(False, alias="LOOPING")
     loop_interval: int | None = Field(None, alias="LOOP_INTERVAL")
-    domain_configs: list[DomainConfig] = Field(default_factory=list, alias="DOMAIN_CONFIGS", min_length=1)
+    domain_configs: list[DomainConfig] = Field(
+        default_factory=list, alias="DOMAIN_CONFIGS", min_length=1
+    )
     ipv4_providers: list[str] | None = Field(None, alias="IPV4_PROVIDERS")
 
-    @model_validator(mode='after')
+    @model_validator(mode="after")
     def _validate_loop_interval(self):
         if self.loop_interval and not self.loop_interval:
             raise ValidationError(
                 "Please provide a loop interval when setting looping to true."
             )
 
-    @field_validator('ipv4_providers')
+    @field_validator("ipv4_providers")
     @classmethod
     def _validate_ipv4_providers(cls, v) -> list[str]:
         if v is not None and not v:
@@ -46,5 +48,7 @@ class Config(BaseModel):
 def get_config() -> Config:
     environment_variables = dict(os.environ)
     if "DOMAIN_CONFIGS" in environment_variables:
-        environment_variables["DOMAIN_CONFIGS"] = json.loads(environment_variables["DOMAIN_CONFIGS"])
+        environment_variables["DOMAIN_CONFIGS"] = json.loads(
+            environment_variables["DOMAIN_CONFIGS"]
+        )
     return Config(**environment_variables)

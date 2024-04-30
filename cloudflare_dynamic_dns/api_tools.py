@@ -30,17 +30,23 @@ async def set_cloudflare_dns_records(config: Config, ip: str):
             await _overwrite_dns_record(
                 config.zone_id, config.bearer_token, record_id, ip, domain_config
             )
-            LOGGER.info(f"Successfully updated DNS record for {domain_config.domain_name}")
+            LOGGER.info(
+                f"Successfully updated DNS record for {domain_config.domain_name}"
+            )
 
         else:
             # Create a new A record
             await _create_new_dns_record(
                 config.zone_id, config.bearer_token, ip, domain_config
             )
-            LOGGER.info(f"Successfully created DNS record for {domain_config.domain_name}")
+            LOGGER.info(
+                f"Successfully created DNS record for {domain_config.domain_name}"
+            )
 
 
-async def _get_existing_dns_record(zone_id: str, bearer_token: str, domain_name: str) -> dict | None:
+async def _get_existing_dns_record(
+    zone_id: str, bearer_token: str, domain_name: str
+) -> dict | None:
     url = BASE_URL + zone_id + GET_PATH
     try:
         async with httpx.AsyncClient() as client:
@@ -58,7 +64,7 @@ async def _get_existing_dns_record(zone_id: str, bearer_token: str, domain_name:
 
 
 async def _create_new_dns_record(
-        zone_id: str, bearer_token: str, ip: str, domain_config: DomainConfig
+    zone_id: str, bearer_token: str, ip: str, domain_config: DomainConfig
 ):
     url = BASE_URL + zone_id + CREATE_PATH
     try:
@@ -74,21 +80,23 @@ async def _create_new_dns_record(
                     "type": "A",
                     "Comment": domain_config.comment,
                     "tags": domain_config.tags,
-                    "ttl": domain_config.ttl
+                    "ttl": domain_config.ttl,
                 },
             )
             response.raise_for_status()
             return response.json()
     except (HTTPError, TimeoutError) as e:
-        LOGGER.error(f"Error creating DNS record for {domain_config.domain_name}", exc_info=e)
+        LOGGER.error(
+            f"Error creating DNS record for {domain_config.domain_name}", exc_info=e
+        )
 
 
 async def _overwrite_dns_record(
-        zone_id: str,
-        bearer_token: str,
-        dns_record_id: str,
-        ip: str,
-        domain_config: DomainConfig,
+    zone_id: str,
+    bearer_token: str,
+    dns_record_id: str,
+    ip: str,
+    domain_config: DomainConfig,
 ):
     url = BASE_URL + zone_id + CREATE_PATH + "/" + dns_record_id
     try:
@@ -104,13 +112,15 @@ async def _overwrite_dns_record(
                     "type": "A",
                     "Comment": domain_config.comment,
                     "tags": domain_config.tags,
-                    "ttl": domain_config.ttl
+                    "ttl": domain_config.ttl,
                 },
             )
             response.raise_for_status()
             return response.json()
     except (HTTPError, TimeoutError) as e:
-        LOGGER.error(f"Error updating DNS record for {domain_config.domain_name}", exc_info=e)
+        LOGGER.error(
+            f"Error updating DNS record for {domain_config.domain_name}", exc_info=e
+        )
 
 
 def _is_equivalent(existing_record: dict, ip: str, domain_config: DomainConfig) -> bool:

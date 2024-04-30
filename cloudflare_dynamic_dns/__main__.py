@@ -7,7 +7,7 @@ from cloudflare_dynamic_dns.ip_tools import get_public_ipv4_address
 
 
 def _setup_logging(log_level: str):
-    logging.basicConfig(format='%(asctime)s:%(levelname)s:%(message)s', level=log_level)
+    logging.basicConfig(format="%(asctime)s:%(levelname)s:%(message)s", level=log_level)
     # Disable httpx info logs.
     logging.getLogger("httpx").disabled = True
     logging.getLogger("httpcore.connection").disabled = True
